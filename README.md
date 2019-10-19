@@ -13,3 +13,9 @@ Path Intellisense
 topper
 Bracket Pair Colorizer
 ```
+
+数据库初始化
+```
+python3 manage.py  makemigrations 
+ python3 manage.py migrate
+```
