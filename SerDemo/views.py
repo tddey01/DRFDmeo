@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.shortcuts import HttpResponse
-from django.views.generic.base import View 
+from django.http import JsonResponse, HttpResponse
+from django.views.generic.base import View
 from SerDemo import models
-import json
+
+
+
 # Create your views here.
 
 # book_list = [
@@ -14,9 +16,19 @@ import json
 
 
 class BookView(View):
-    
-    def get(self,request):
-        book_list = models.Book.objects.values('id','title')   # 获取数据
+
+    def get(self, request):
+        book_list = models.Book.objects.values("nid","title", "pub_time", 'publish')  # 获取数据
         book_list = list(book_list)
-        ret = json.dumps(book_list,ensure_ascii=False)
-        return  HttpResponse('ok')
+        ret = []
+        for book in book_list:
+            publisher_id = book["publish"]
+            publisher_obj = models.Publisher.objects.filter(nid=publisher_id).first()
+            book["publish"] = {
+                "id": publisher_id,
+                "title": publisher_obj.title
+            }
+            ret.append(book)
+        # ret = json.dumps(book_list,ensure_ascii=False)
+        # return HttpResponse(book_list)
+        return JsonResponse(ret, safe=False, json_dumps_params={"ensure_ascii": False})

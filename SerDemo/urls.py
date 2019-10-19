@@ -6,6 +6,6 @@ from django.urls import include
 
 from .views import BookView
 urlpatterns = [
-    path('list/', BookView.as_view()),
+    path('list', BookView.as_view()),
 ]
 
