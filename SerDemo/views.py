@@ -57,8 +57,8 @@ class BookView(APIView):
         return  Response(ret.data)
 '''
 
-# '''
-# DRF 第二版版
+'''
+# DRF 第二版
 from rest_framework.views import APIView
 from rest_framework.response import  Response
 from SerDemo import serializers
@@ -70,5 +70,29 @@ class BookView(APIView):
         book_list = models.Book.objects.all()
         ret = serializers.BookSerializer(book_list,many=True) # many=True 代表传多个参数
         return  Response(ret.data)
-# '''
+'''
 
+# '''
+# DRF 第三版
+from rest_framework.views import APIView
+from rest_framework.response import  Response
+from SerDemo import serializers
+from SerDemo import models
+
+class BookView(APIView):
+
+    def get(self,request):
+        book_list = models.Book.objects.all()
+        ret = serializers.BookSerializer(book_list,many=True) # many=True 代表传多个参数
+        return  Response(ret.data)
+
+    def post(self,request):
+        print(request.data)
+        serializer = serializers.BookSerializer(data=request.data)   # 传入反序列数据
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.validated_data)
+        else:
+            return Response(serializer.errors)
+
+# '''
