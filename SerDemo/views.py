@@ -47,6 +47,8 @@ from SerDemo import serializers
 class BookView(APIView):
 
     def get(self,request):
-        book_obj = models.Book.objects.first()
-        ret = serializers.BookSerializer(book_obj)
+        # book_obj = models.Book.objects.first()
+        # ret = serializers.BookSerializer(book_obj)
+        book_list = models.Book.objects.all()
+        ret = serializers.BookSerializer(book_list,many=True) # many=True 代表传多个参数
         return  Response(ret.data)
