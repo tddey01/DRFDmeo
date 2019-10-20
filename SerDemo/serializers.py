@@ -86,7 +86,7 @@ class BookSerializer(serializers.Serializer):
         
 """
 
-# """
+"""
 # 第四版 DRF
 
 from rest_framework import serializers
@@ -166,4 +166,65 @@ class BookSerializer(serializers.Serializer):
             return attrs
         else:
             raise  serializers.ValidationError('分类以及标题不符合要求')
-# """
+"""
+
+"""
+# 第五版
+"""
+from rest_framework import serializers
+from SerDemo import models
+
+class PublisherSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField(max_length=32)
+
+
+class AuthorSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(max_length=32)
+
+
+book_obj = {
+        "title": "Alex的使用教程",
+        "w_category": 1,
+        "pub_time": "2018-10-09",
+        "publisher_id": 1,
+        "author_list": [1, 2]
+    }
+
+
+data = {
+    "title": "Alex的使用教程2"
+}
+
+
+def my_validate(value):
+    if "敏感信息" in value.lower():
+        raise serializers.ValidationError("不能含有敏感信息")
+    else:
+        return value
+
+
+class BookSerializer(serializers.ModelSerializer):
+    categroy = serializers.CharField(source="get_category_display")  # ModelSerializer 序列化过程
+
+    publish = serializers.SerializerMethodField()
+
+    def get_publish(self,obj):
+        # obj 序列化的每个book对象
+        publish_obj = obj.publish
+        return {'nid':publish_obj.nid,'title':publish_obj.title}
+
+    author = serializers.SerializerMethodField()
+
+    def get_author(self,obj):
+        author_query_set = obj.author.all()
+        return [{'nid':author_obj.nid,'name':author_obj.name} for author_obj in author_query_set]
+
+
+    class Meta:
+        model = models.Book
+        # fields = ['nid','title','pub_time']
+        fields = '__all__' # 获取所有字段
+        # depth = 1
+
