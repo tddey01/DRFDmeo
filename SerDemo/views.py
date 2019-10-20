@@ -1,7 +1,4 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-from django.views.generic.base import View
-from django.core import serializers
 from SerDemo import models
 
 
@@ -15,9 +12,11 @@ from SerDemo import models
 #     },{}
 # ]
 
-#
+# from django.views.generic.base import View
 # class BookView(View):
 #     # 第一版 用。values JsonResponse 实现序列化
+#     # from django.http import JsonResponse, HttpResponse
+#     # from SerDemo import models
 #     # def get(self, request):
 #     #     book_list = models.Book.objects.values("nid","title", "pub_time", 'publish')  # 获取数据
 #     #     book_list = list(book_list)
@@ -35,20 +34,41 @@ from SerDemo import models
 #     #     return JsonResponse(ret, safe=False, json_dumps_params={"ensure_ascii": False})
 #     # ========================================================================================================
 #      第二版  用django serializers实现序列化
+#     from django.core import serializers
+#     from django.http import JsonResponse, HttpResponse
+#     from SerDemo import models
 #     def get(self,request):
 #         book_list = models.Book.objects.all()
 #         ret =  serializers.serialize("json",book_list, ensure_ascii=False)
 #         return  HttpResponse(ret)
 
+'''
+# DRF 第一版
 from rest_framework.views import APIView
 from rest_framework.response import  Response
 from SerDemo import serializers
+from SerDemo import models
 
 class BookView(APIView):
 
     def get(self,request):
-        # book_obj = models.Book.objects.first()
-        # ret = serializers.BookSerializer(book_obj)
+        book_obj = models.Book.objects.first()
+        ret = serializers.BookSerializer(book_obj)
+        return  Response(ret.data)
+'''
+
+# '''
+# DRF 第二版版
+from rest_framework.views import APIView
+from rest_framework.response import  Response
+from SerDemo import serializers
+from SerDemo import models
+
+class BookView(APIView):
+
+    def get(self,request):
         book_list = models.Book.objects.all()
         ret = serializers.BookSerializer(book_list,many=True) # many=True 代表传多个参数
         return  Response(ret.data)
+# '''
+
