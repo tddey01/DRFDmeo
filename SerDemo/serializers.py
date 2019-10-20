@@ -55,11 +55,11 @@ class AuthorSerializer(serializers.Serializer):
 
 
 book_obj = {
-    "title": "python全栈",
+    "title": "alex全栈",
     "w_category": 1,
     "pub_time": "2019-10-19",
     "publish_nid": 1,
-    "author_list": [1]
+    "author_list": [1,2]
 }
 
 from SerDemo import models
