@@ -2,10 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 from django.urls import path
-from django.urls import include
+from SerDemo import views
 
-from .views import BookView
 urlpatterns = [
-    path('list/', BookView.as_view()),
+    path('list/', views.BookView.as_view()),
+    path('retrieve/<int:id>', views.BookEditView.as_view()),  # 2.0 以前版本写法   2.0 以后版本写法 <init:id>
 ]
 

@@ -96,3 +96,21 @@ class BookView(APIView):
             return Response(serializer.errors)
 
 # '''
+
+class BookEditView(APIView):
+
+    def get(self,request,id):  # 查看单条数据
+        book_obj = models.Book.objects.filter(nid=id).first()
+        ret = serializers.BookSerializer(book_obj)
+
+        return Response(ret.data)
+
+    def put(self,request,id):
+        print(request.data)
+        book_obj = models.Book.objects.filter(nid=id).first()
+        serializer = serializers.BookSerializer(book_obj,data=request.data,partial=True)  # partial=True  允许部分更新
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.validated_data)
+        else:
+            return Response(serializer.errors)
