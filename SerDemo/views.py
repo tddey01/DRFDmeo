@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from SerDemo import models
 
-
-
 # Create your views here.
 
 # book_list = [
@@ -72,7 +70,7 @@ class BookView(APIView):
         return  Response(ret.data)
 '''
 
-# """
+"""
 # DRF 第三版
 from rest_framework.views import APIView
 from rest_framework.response import  Response
@@ -114,4 +112,225 @@ class BookEditView(APIView):
             return Response(serializer.validated_data)
         else:
             return Response(serializer.errors)
+"""
+
+"""
+# DRF 第四版 第一次封装视图函数
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from SerDemo import serializers
+from SerDemo import models
+
+
+class GenericAPIView(APIView):
+    query_set = None
+    serializer_class = None
+
+    def get_queryset(self):
+        return self.query_set
+
+    def get_serializer(self, *args, **kwargs):
+        return self.serializer_class(*args, **kwargs)
+
+
+class ListModelMixin(object):
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        ret = self.get_serializer(queryset, many=True)
+        return Response(ret.data)
+
+
+class CreateModelMixin(object):
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+class RetrieveModelMixin(object):
+    def retrieve(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        ret = self.get_serializer(book_obj)
+        return Response(ret.data)
+
+
+class PutModelMixin(object):
+    def update(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        serializer = self.get_serializer(book_obj, data=request.data, partial=True)  # partial=True  允许部分更新
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+class DelModelMixin(object):
+    def destroy(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        book_obj.delete()
+        return Response('delete')
+
+class BookView(GenericAPIView, ListModelMixin, CreateModelMixin):
+   
+    query_set = models.Book.objects.all()
+    serializer_class = serializers.BookSerializer
+
+    def get(self, request):   # 查看数据
+        return self.list(request)
+
+    def post(self, request): # 添加数据
+        return self.create(request)
+
+
+class BookEditView(GenericAPIView, RetrieveModelMixin,PutModelMixin,DelModelMixin):
+    query_set = models.Book.objects.all()
+    serializer_class = serializers.BookSerializer
+
+    def get(self, request, id):  # 查看单条数据
+        return self.retrieve(request, id)
+
+    def put(self, request, id):   # 修改数据
+        return self.update(request,id)
+
+    def delete(self, request, id): # 删除数据
+        return self.destroy(request,id)
+"""
+
 # """
+# DRF 第四版 第一次封装视图函数
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from SerDemo import serializers
+from SerDemo import models
+
+
+class GenericAPIView(APIView):
+
+    query_set = None
+    serializer_class = None
+
+    def get_queryset(self):
+        '''
+
+        :return:
+        '''
+        return self.query_set
+
+    def get_serializer(self, *args, **kwargs):
+        '''
+
+        :param args:
+        :param kwargs:
+        :return:
+        '''
+        return self.serializer_class(*args, **kwargs)
+
+
+class ListModelMixin(object):
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        ret = self.get_serializer(queryset, many=True)
+        return Response(ret.data)
+
+
+class CreateModelMixin(object):
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+class RetrieveModelMixin(object):
+    def retrieve(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        ret = self.get_serializer(book_obj)
+        return Response(ret.data)
+
+
+class UpdateModelMixin(object):
+    def update(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        serializer = self.get_serializer(book_obj, data=request.data, partial=True)  # partial=True  允许部分更新
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+class DelModelMixin(object):
+
+    def destroy(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        book_obj.delete()
+        return Response('delete')
+class ListCreateModelMixiin(GenericAPIView, ListModelMixin, CreateModelMixin):
+    pass
+
+class RetrieveUpdateDestroyAPIView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    pass
+
+
+class BookView(ListCreateModelMixiin):
+
+    query_set = models.Book.objects.all()
+    serializer_class = serializers.BookSerializer
+
+    def get(self, request):   # 查看数据
+        '''
+
+        :param request:
+        :return:
+        '''
+        return self.list(request)
+
+    def post(self, request): # 添加数据
+        '''
+
+        :param request:
+        :return:
+        '''
+        return self.create(request)
+
+
+class BookEditView(RetrieveUpdateDestroyAPIView):
+
+
+    query_set = models.Book.objects.all()
+    serializer_class = serializers.BookSerializer
+
+    def get(self, request, id):  # 查看单条数据
+        '''
+
+        :param request:
+        :param id:
+        :return:
+        '''
+        return self.retrieve(request, id)
+
+    def put(self, request, id):   # 修改数据
+        '''
+
+        :param request:
+        :param id:
+        :return:
+        '''
+        return self.update(request,id)
+
+    def delete(self, request, id): # 删除数据
+        '''
+
+        :param request:
+        :param id:
+        :return:
+        '''
+        return self.destroy(request,id)
+# """
+
