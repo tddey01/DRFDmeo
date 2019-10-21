@@ -72,7 +72,7 @@ class BookView(APIView):
         return  Response(ret.data)
 '''
 
-# '''
+# """
 # DRF 第三版
 from rest_framework.views import APIView
 from rest_framework.response import  Response
@@ -95,7 +95,7 @@ class BookView(APIView):
         else:
             return Response(serializer.errors)
 
-# '''
+
 
 class BookEditView(APIView):
 
@@ -114,3 +114,4 @@ class BookEditView(APIView):
             return Response(serializer.validated_data)
         else:
             return Response(serializer.errors)
+# """

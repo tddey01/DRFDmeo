@@ -206,18 +206,21 @@ def my_validate(value):
 
 
 class BookSerializer(serializers.ModelSerializer):
-    categroy = serializers.CharField(source="get_category_display")  # ModelSerializer 序列化过程
+    category_display = serializers.SerializerMethodField(read_only=True)  # ModelSerializer 序列化过程
 
-    publish = serializers.SerializerMethodField()
+    def get_category_display(self,obj):
+        return  obj.get_category_display()
 
-    def get_publish(self,obj):
+    publish_info = serializers.SerializerMethodField(read_only=True)
+
+    def get_publish_info(self,obj):
         # obj 序列化的每个book对象
         publish_obj = obj.publish
         return {'nid':publish_obj.nid,'title':publish_obj.title}
 
-    author = serializers.SerializerMethodField()
+    authors = serializers.SerializerMethodField(read_only=True)
 
-    def get_author(self,obj):
+    def get_authors(self,obj):
         author_query_set = obj.author.all()
         return [{'nid':author_obj.nid,'name':author_obj.name} for author_obj in author_query_set]
 
@@ -227,4 +230,16 @@ class BookSerializer(serializers.ModelSerializer):
         # fields = ['nid','title','pub_time']
         fields = '__all__' # 获取所有字段
         # depth = 1
+
+        extra_kwargs = {
+            "category":{
+                "write_only":True
+            },
+            "publish":{
+                "write_only": True
+            },
+            "author":{
+                "write_only": True
+            }
+        }
 
