@@ -197,5 +197,5 @@ fabric.properties
 .idea
 venv
 .vscode
-./DRFDmeo/settings.py
-./SerDemo/__init__.py
+DRFDmeo/settings.py
+SerDemo/__init__.py
