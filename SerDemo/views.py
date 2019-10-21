@@ -247,36 +247,8 @@ class CreateModelMixin(object):
         else:
             return Response(serializer.errors)
 
-
-class RetrieveModelMixin(object):
-    def retrieve(self, request, id):
-        book_obj = self.get_queryset().filter(nid=id).first()
-        ret = self.get_serializer(book_obj)
-        return Response(ret.data)
-
-
-class UpdateModelMixin(object):
-    def update(self, request, id):
-        book_obj = self.get_queryset().filter(nid=id).first()
-        serializer = self.get_serializer(book_obj, data=request.data, partial=True)  # partial=True  允许部分更新
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
-
-class DelModelMixin(object):
-
-    def destroy(self, request, id):
-        book_obj = self.get_queryset().filter(nid=id).first()
-        book_obj.delete()
-        return Response('delete')
 class ListCreateModelMixiin(GenericAPIView, ListModelMixin, CreateModelMixin):
     pass
-
-class RetrieveUpdateDestroyAPIView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
-    pass
-
 
 class BookView(ListCreateModelMixiin):
 
@@ -298,6 +270,37 @@ class BookView(ListCreateModelMixiin):
         :return:
         '''
         return self.create(request)
+
+
+
+class RetrieveModelMixin(object):
+    def retrieve(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        ret = self.get_serializer(book_obj)
+        return Response(ret.data)
+
+
+class UpdateModelMixin(object):
+    def update(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        serializer = self.get_serializer(book_obj, data=request.data, partial=True)  # partial=True  允许部分更新
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+class DestroyModelMixin(object):
+
+    def destroy(self, request, id):
+        book_obj = self.get_queryset().filter(nid=id).first()
+        book_obj.delete()
+        return Response('delete')
+
+
+class RetrieveUpdateDestroyAPIView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    pass
+
 
 
 class BookEditView(RetrieveUpdateDestroyAPIView):
