@@ -16,4 +16,4 @@ urlpatterns = [
     # path('list/', views.BookModeViewSet.as_view({"get": "list", "post": "create"})),
     # path('retrieve/<int:pk>', views.BookModeViewSet.as_view({"get": "retrieve", "put": "update", "delete": "destroy"})),
 ]
-urlpatterns += router.urls
+urlpatterns += router.urls # 自动生成路由 带参数     温馨提示 没有增删改查 不要使用自动生成路由
