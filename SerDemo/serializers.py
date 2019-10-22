@@ -216,13 +216,13 @@ class BookSerializer(serializers.ModelSerializer):
     def get_publish_info(self,obj):
         # obj 序列化的每个book对象
         publish_obj = obj.publish
-        return {'nid':publish_obj.nid,'title':publish_obj.title}
+        return {'nid':publish_obj.id,'title':publish_obj.title}
 
     authors = serializers.SerializerMethodField(read_only=True)
 
     def get_authors(self,obj):
         author_query_set = obj.author.all()
-        return [{'nid':author_obj.nid,'name':author_obj.name} for author_obj in author_query_set]
+        return [{'id':author_obj.id,'name':author_obj.name} for author_obj in author_query_set]
 
 
     class Meta:

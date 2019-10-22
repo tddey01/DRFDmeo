@@ -577,14 +577,14 @@ class BookView(ListCreateModelMixiin):
 
 class RetrieveModelMixin(object):
     def retrieve(self, request, id):
-        book_obj = self.get_queryset().filter(nid=id).first()
+        book_obj = self.get_queryset().filter(id=id).first()
         ret = self.get_serializer(book_obj)
         return Response(ret.data)
 
 
 class UpdateModelMixin(object):
     def update(self, request, id):
-        book_obj = self.get_queryset().filter(nid=id).first()
+        book_obj = self.get_queryset().filter(id=id).first()
         serializer = self.get_serializer(book_obj, data=request.data, partial=True)  # partial=True  允许部分更新
         if serializer.is_valid():
             serializer.save()
@@ -596,7 +596,7 @@ class UpdateModelMixin(object):
 class DestroyModelMixin(object):
 
     def destroy(self, request, id):
-        book_obj = self.get_queryset().filter(nid=id).first()
+        book_obj = self.get_queryset().filter(id=id).first()
         book_obj.delete()
         return Response('delete')
 
