@@ -23,4 +23,4 @@ class BookView(APIView):
 
         # return Response(ser_obj.data)
         return page_obj.get_paginated_response(ser_obj.data)
-    # http://127.0.0.1:8000/page/book?page=3 分页测试方法
+       # http://127.0.0.1:8000/page/book?page=3 分页测试方法
