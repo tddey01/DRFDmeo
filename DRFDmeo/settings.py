@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'SerDemo.apps.SerdemoConfig',
     'rest_framework',  # 注册app
+    'authDemo.apps.AuthdemoConfig', # 认证app
 ]
 
 MIDDLEWARE = [
