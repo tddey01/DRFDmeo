@@ -5,4 +5,5 @@ from authDemo import views
 urlpatterns = [
     path(r'',views.Demoview.as_view()),
     path(r'login/',views.LoginView.as_view()),
+    path(r'test/', views.TestView.as_view()),
 ]

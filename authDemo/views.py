@@ -15,6 +15,7 @@ class LoginView(APIView):
     def post(self,request):
         username = request.data.get('username')
         pwd = request.data.get('pwd')
+        # 登录成功 生成token 会把token给返回
         token = uuid.uuid4()
         models.User.objects.create(username=username,pwd=pwd,token=token)
         return  Response('创建成功')
@@ -22,4 +23,6 @@ class LoginView(APIView):
 class TestView(APIView):
 
     def get(self,request):
+        print(request.user)
+        print(request.auth)
         return  Response("认证测试")
