@@ -3,7 +3,8 @@ from  authDemo import models
 from django.shortcuts import render
 from rest_framework.views import  APIView
 from rest_framework.response import   Response
-from utils.auth import MyAuth
+from  utils import auth
+from utils import permission
 
 # Create your views here.
 
@@ -22,7 +23,9 @@ class LoginView(APIView):
         return  Response('创建成功')
 
 class TestView(APIView):
-    authentication_classes = [MyAuth,] # 局部视图
+    authentication_classes = [auth.MyAuth] # 局部视图
+    permission_classes = [permission.MyPermission] #权限类
+
     def get(self,request):
         print(request.user)
         print(request.auth)
