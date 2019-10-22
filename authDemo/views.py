@@ -5,6 +5,7 @@ from rest_framework.views import  APIView
 from rest_framework.response import   Response
 from  utils import auth
 from utils import permission
+from utils import  throttle
 
 # Create your views here.
 
@@ -25,6 +26,7 @@ class LoginView(APIView):
 class TestView(APIView):
     authentication_classes = [auth.MyAuth] # 局部视图
     permission_classes = [permission.MyPermission] #权限类
+    throttle_classes = [throttle.MyThrottle, ]
 
     def get(self,request):
         print(request.user)
