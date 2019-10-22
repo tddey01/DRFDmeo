@@ -19,7 +19,7 @@ class BookView(APIView):
         # 把分页好的数据序列化返回
 
         # 带上上一页下一页连接的响应
-        ser_obj = serializers.BookSerializer(queryset,many=True)
+        ser_obj = serializers.BookSerializer(page_queryset,many=True)
 
         # return Response(ser_obj.data)
         return page_obj.get_paginated_response(ser_obj.data)
