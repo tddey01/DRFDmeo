@@ -157,4 +157,7 @@ REST_FRAMEWORK = {
     'ALLOWED_VERSIONS': "v1,v2,v3",
     'VERSION_PARAM': 'ver',
     # 'DEFAULT_AUTHENTICATION_CLASSES':['utils.auth.MyAuth']
+    'DEFAULT_THROTTLE_RATES':{
+        'WD':'3/m'  # 限制访问频率60秒3次
+    }
 }

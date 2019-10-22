@@ -1,11 +1,13 @@
 #!/usr/bin/env  python3
 # -*- coding: UTF-8 -*-
 from rest_framework.throttling import BaseThrottle
+from rest_framework.throttling import  SimpleRateThrottle
 import time
 
 VISIT_RECORD = {}
 
-
+"""
+# 第一版 限流
 class MyThrottle(BaseThrottle):
 
     def __init__(self):
@@ -17,6 +19,7 @@ class MyThrottle(BaseThrottle):
         # 访问列表 {IP:[tiem1,time2,time3]}
         # 获取请求的IP地址
         ip = request.META.get("REMOTE_ADDR")
+        print(request.META)
         # 判断IP地址是否在访问列表
         print(ip,'IP')
         now = time.time()
@@ -41,3 +44,11 @@ class MyThrottle(BaseThrottle):
         # 返回需要再等多久才能访问
         time = 60 - (self.history[0] - self.history[-1])
         return  time
+"""
+
+class MyThrottle(SimpleRateThrottle):
+    scope = 'WD'
+    def get_cache_key(self, request, view):
+        #  如果IP地址做限流返回IP地址
+        key = self.get_ident(request)
+        return key
