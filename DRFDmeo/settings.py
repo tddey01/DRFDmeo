@@ -24,7 +24,7 @@ SECRET_KEY = 'bnuq$t*g3r&g^m2b9*0hffel*937-*1cbupm1m$lb5f(qc(pqj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -126,9 +126,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static/")
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static/")
+# ]
 
 # mysql logs  window output 
 LOGGING = {
