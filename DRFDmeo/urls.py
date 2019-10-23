@@ -24,4 +24,5 @@ urlpatterns = [
     path('auth/',include('authDemo.urls')),
     path('page/', include("pageDemo.urls")),
     path('parser/', include("parserDemo.urls")),
+    path('cors/', include("corsDemo.urls")),
 ]
