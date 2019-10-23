@@ -25,4 +25,5 @@ urlpatterns = [
     path('page/', include("pageDemo.urls")),
     path('parser/', include("parserDemo.urls")),
     path('cors/', include("corsDemo.urls")),
+    path('type/',include('ContentTypeDemo.urls')),
 ]

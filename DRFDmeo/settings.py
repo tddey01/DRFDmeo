@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'SerDemo.apps.SerdemoConfig',
     'rest_framework',  # 注册app
     'authDemo.apps.AuthdemoConfig', # 认证app
+    'ContentTypeDemo.apps.ContenttypedemoConfig',
 ]
 
 MIDDLEWARE = [
